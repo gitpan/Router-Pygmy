@@ -1,5 +1,5 @@
 package Router::Pygmy;
-$Router::Pygmy::VERSION = '0.01';
+$Router::Pygmy::VERSION = '0.02';
 use strict;
 use warnings;
 
@@ -104,14 +104,12 @@ sub match_named {
     return ( $name, \%params);
 }
 
-
+1;
 # vim: expandtab:shiftwidth=4:tabstop=4:softtabstop=0:textwidth=78: 
 
 __END__
 
 =pod
-
-=encoding UTF-8
 
 =head1 NAME
 
@@ -119,7 +117,7 @@ Router::Pygmy - ultrasimple path router matching paths to names and args
 
 =head1 VERSION
 
-version 0.01
+version 0.02
 
 =head1 SYNOPSIS
 

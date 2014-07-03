@@ -1,11 +1,12 @@
 package Router::Pygmy::Route;
-$Router::Pygmy::Route::VERSION = '0.01';
+$Router::Pygmy::Route::VERSION = '0.02';
 use strict;
 use warnings;
 
 # ABSTRACT: simple route object 
 
 use Carp;
+our @CARP_NOT = qw(Router::Pygmy);
 
 sub spec { shift()->{spec}; }
 
@@ -97,15 +98,13 @@ __END__
 
 =pod
 
-=encoding UTF-8
-
 =head1 NAME
 
 Router::Pygmy::Route - simple route object 
 
 =head1 VERSION
 
-version 0.01
+version 0.02
 
 =head1 AUTHOR
 
