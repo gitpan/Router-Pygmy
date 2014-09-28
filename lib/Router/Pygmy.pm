@@ -1,5 +1,5 @@
 package Router::Pygmy;
-$Router::Pygmy::VERSION = '0.02';
+$Router::Pygmy::VERSION = '0.03';
 use strict;
 use warnings;
 
@@ -12,13 +12,31 @@ use Router::Pygmy::Route;
 my ( $PATH_PART_IDX, $ARG_IDX, $ROUTE_IDX ) = 0 .. 2;
 
 sub new {
-    my $class = shift;
-    return bless(
-        {   lookup    => [],
+    my $class  = shift;
+    my $router = bless(
+        {
+            lookup    => [],
             route_for => {},
         },
         $class
     );
+    if (@_) {
+
+        # so far only
+        # routes => \%routes
+        # or
+        # { routes => \%routes }
+        # is allowed
+        my %args = ref $_[0] && ref $_[0] eq 'HASH' ? %{ $_[0] } : @_;
+
+        if ( my $routes = $args{routes} ) {
+            for my $spec ( keys %$routes ) {
+                $router->add_route( $spec, $routes->{$spec} );
+            }
+        }
+    }
+
+    return $router;
 }
 
 sub new_route {
@@ -117,7 +135,7 @@ Router::Pygmy - ultrasimple path router matching paths to names and args
 
 =head1 VERSION
 
-version 0.02
+version 0.03
 
 =head1 SYNOPSIS
 
@@ -170,8 +188,9 @@ Router::Pygmy is a very simple straightforward router which maps paths to (name,
 =item C<new> 
 
   my $router = Router::Pygmy->new;
+  my $router = Router::Pygmy->new(routes => \%hash );
 
-parameterless constructor
+a constructor
 
 =item C<add_route($route, $name)>
 

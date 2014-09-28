@@ -1,5 +1,5 @@
 package Router::Pygmy::Route;
-$Router::Pygmy::Route::VERSION = '0.02';
+$Router::Pygmy::Route::VERSION = '0.03';
 use strict;
 use warnings;
 
@@ -104,7 +104,7 @@ Router::Pygmy::Route - simple route object
 
 =head1 VERSION
 
-version 0.02
+version 0.03
 
 =head1 AUTHOR
 
