@@ -1,5 +1,5 @@
 package Router::Pygmy;
-$Router::Pygmy::VERSION = '0.03';
+$Router::Pygmy::VERSION = '0.04';
 use strict;
 use warnings;
 
@@ -116,10 +116,9 @@ sub match_named {
 
     my ($name, $args) = $this->match(@_) or return;
     my $route = $this->{route_for}{$name};
-    my %params;
-    @params{@{$route->arg_names}}  = @$args;
-
-    return ( $name, \%params);
+    my $names = $route->arg_names;
+    my $i = 0;
+    return ( $name, [ map { ($names->[$i++] => $_) } @$args ]);
 }
 
 1;
@@ -129,13 +128,15 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 Router::Pygmy - ultrasimple path router matching paths to names and args
 
 =head1 VERSION
 
-version 0.03
+version 0.04
 
 =head1 SYNOPSIS
 
@@ -149,10 +150,10 @@ version 0.03
     # mapping path to ($name, \@args) or  ($name, \%params)
 
     my ($name, $args) =  $router->match('tree/oak/branches'); # yields ('tree.branches', ['oak'] )
-    my ($name, $params) = $router->match_named('tree/oak/branches'); # yields ('tree.branches', {species=>'oak'}) 
+    my ($name, $params) = $router->match_named('tree/oak/branches'); # yields ('tree.branches', [species=>'oak']) 
 
     my ($name, $args) = $router->match('tree/oak/12'); # yields ('tree.branch', [ 'oak', 12 ] )
-    my ($name, $params) = $router->match_named('tree/oak/12'); # yields ('tree.branch', { species=> 'oak', branch => 12 } )
+    my ($name, $params) = $router->match_named('tree/oak/12'); # yields ('tree.branch', [ species=> 'oak', branch => 12 ] )
 
     my ($name, $args) = $router->match('tree/oak/12/ut'); # yields ()
 
@@ -210,7 +211,8 @@ Returns an empty list if no route matches.
 
     my ($name, $args) = $router->match_named("tree/walnut/branches");
 
-Same as C<match> only the second element of the list is hash { param_name => param_value } 
+Same as C<match> only the second element of the list is an arrayref with key
+value pairs [ param_name => param_value, param_name => param_value ] 
 
 =item C<path_for($name, $args)>
 
